@@ -131,17 +131,18 @@ app.post('/api/auth/send-otp', async (req, res) => {
     await user.save();
 
     console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+    
     const transporter = nodemailer.createTransport({
-      
-      host: "smtp.gmail.com",  
-      port: 587,              
-      secure: false,            
+      service: "gmail", 
       auth: { 
         user: process.env.EMAIL_USER, 
         pass: process.env.EMAIL_PASS 
+      },
+      tls: {
+        rejectUnauthorized: false
       }
     });
-
+    console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
     const mailOptions = {
       from: 'NSS IIT Roorkee <amardeepkumar13641364@gmail.com>',
       to: email,
