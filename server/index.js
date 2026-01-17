@@ -140,7 +140,8 @@ app.post('/api/auth/send-otp', async (req, res) => {
       },
       tls: {
         rejectUnauthorized: false
-      }
+      },
+      family: 4
     });
     console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
     const mailOptions = {
