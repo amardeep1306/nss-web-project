@@ -130,8 +130,9 @@ app.post('/api/auth/send-otp', async (req, res) => {
     user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 Min expiry
     await user.save();
 
-  
+    console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
     const transporter = nodemailer.createTransport({
+      
       host: "smtp.gmail.com",  
       port: 587,              
       secure: false,            
