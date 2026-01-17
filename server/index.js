@@ -17,7 +17,7 @@ const User = require('./models/user');
 const app = express();
 
 app.use(cors({
-    origin: ["http://localhost:5173", "https://apka-frontend-app.vercel.app"],
+    origin: ["http://localhost:5173", "https://nss-web-project.vercel.app/"],
     credentials: true
 }));
 app.use(express.json());
