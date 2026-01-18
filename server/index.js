@@ -133,12 +133,13 @@ app.post('/api/auth/send-otp', async (req, res) => {
     console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
     
     const transporter = nodemailer.createTransport({
-      service: "gmail", 
+      host: "smtp-relay.brevo.com", 
+      port: 587,
+      secure: false, // Brevo 587 par false hi leta hai
       auth: { 
         user: process.env.EMAIL_USER, 
         pass: process.env.EMAIL_PASS 
-      },
-      family: 4 
+      }
     });
     console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
     const mailOptions = {
