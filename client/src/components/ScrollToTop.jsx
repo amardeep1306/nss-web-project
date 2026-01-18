@@ -5,7 +5,7 @@ export default function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // Jaise hi Path (URL) badlega, ye window ko upar scroll kar dega
+    
     window.scrollTo(0, 0);
   }, [pathname]);
 

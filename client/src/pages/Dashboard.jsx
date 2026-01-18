@@ -81,14 +81,14 @@ const Dashboard = () => {
                     {userData.name?.charAt(0)}
                 </div>
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">Hello, {userData.name}! 👋</h1>
+                    <h1 className="text-2xl font-bold text-gray-800">Hello, {userData.name}! </h1>
                     <div className="flex gap-3 mt-1 text-sm text-gray-500">
                         <span className="flex items-center gap-1"><Mail size={14}/> {userData.email || localStorage.getItem('userEmail')}</span>
                     </div>
                 </div>
             </div>
             
-            {/* 👇 BUTTON CHANGED: Now simply navigates to Donate Page */}
+            {/*  BUTTON CHANGED */}
             <button 
                 onClick={() => navigate('/donate')} 
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-blue-500/30 transition transform hover:-translate-y-1"

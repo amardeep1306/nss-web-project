@@ -11,7 +11,7 @@ import {
 
 const Home = () => {
   // ---------------------------------------------------------
-  // 1. STATE MANAGEMENT (Data store karne ke liye)
+  // 1. STATE MANAGEMENT 
   // ---------------------------------------------------------
   const [stats, setStats] = useState({ raised: 0, volunteers: 0, partners: 0 });
   const [causeProgress, setCauseProgress] = useState({});
@@ -26,20 +26,20 @@ const Home = () => {
       .then(data => setStats(data))
       .catch(err => console.error("Stats Error:", err));
 
-    // B. Cause-wise Progress (Kis cause me kitna paisa aaya)
-    fetch(`${BASE_URL}/api/causes-progress`) // Ye API humne pehle banayi thi
+    // B. Cause-wise Progress 
+    fetch(`${BASE_URL}/api/causes-progress`) 
       .then(res => res.json())
       .then(data => setCauseProgress(data))
       .catch(err => console.error("Progress Error:", err));
   }, []);
 
   // ---------------------------------------------------------
-  // 3. CAUSE DATA CONFIGURATION (Database mapping ke sath)
+  // 3. CAUSE DATA CONFIGURATION 
   // ---------------------------------------------------------
   const causesList = [
     {
       title: "Educate a Child",
-      dbName: "Education Support", // 👈 YE NAAM DATABASE SE MATCH HONA CHAHIYE
+      dbName: "Education Support", 
       desc: "Provide books, uniforms, and tuition fees for bright students from slums.",
       image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80",
       goal: 100000, // ₹1 Lakh
@@ -125,7 +125,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-blue-800/50">
                 <StatItem number="12,500+" label="Students Taught" />
-                {/* 👇 UPDATED: Yahan ab Database wala amount dikhega */}
+                {/*  Yahan ab Database wala amount dikhega */}
                 <StatItem number={`₹${stats.raised.toLocaleString()}`} label="Funds Raised" />
                 <StatItem number="500+" label="Blood Units Donated" />
                 <StatItem number="5" label="Villages Adopted" />
@@ -177,7 +177,7 @@ const Home = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* 👇 UPDATED: Ab hum Loop chala rahe hain taaki calculation real ho */}
+            {/* Ab hum Loop chala rahe hain taaki calculation real ho */}
             {causesList.map((cause, index) => {
                 // Calculation Logic
                 const raisedAmount = causeProgress[cause.dbName] || 0; // DB se paisa lo
@@ -237,7 +237,7 @@ const Home = () => {
                     <div className="flex text-yellow-400">
                         <Star size={16} fill="currentColor" /> <Star size={16} fill="currentColor" /> <Star size={16} fill="currentColor" /> <Star size={16} fill="currentColor" /> <Star size={16} fill="currentColor" />
                     </div>
-                    {/* 👇 UPDATED: Real Volunteer Count */}
+                    {/*  UPDATED: Real Volunteer Count */}
                     <span className="font-bold text-sm">4.8/5 Volunteer Rating • {stats.volunteers}+ Active Volunteers</span>
                 </div>
             </div>
@@ -259,7 +259,7 @@ const Home = () => {
                     <Link to="/partner" className="w-full md:w-auto px-10 py-5 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white/10 transition flex items-center justify-center gap-3 text-lg">
                         Partner With Us <Users size={20} />
                     </Link>
-                    {/* 👇 UPDATED: Real Partner Count */}
+                    {/*  UPDATED: Real Partner Count */}
                     <p className="text-blue-200 text-xs mt-3 font-medium opacity-80 group-hover:opacity-100 transition">🏢 Trusted by {stats.partners}+ Organizations</p>
                 </div>
             </div>

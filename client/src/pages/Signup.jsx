@@ -37,7 +37,7 @@ const Signup = () => {
       const data = await res.json();
       
       if (data.status === 'success') {
-        alert("🎉 Account Created Successfully! Please Login.");
+        alert(" Account Created Successfully! Please Login.");
         navigate('/login'); 
       } else {
         alert("Error: " + data.error);

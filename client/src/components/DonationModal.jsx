@@ -11,7 +11,7 @@ const DonationModal = ({ isOpen, onClose, selectedCause }) => {
   const [amount, setAmount] = useState(501);
   const [customAmount, setCustomAmount] = useState('');
   
-  // 👇 UPDATED: Form data capture karne ke liye state init
+  //  UPDATED: Form data capture 
   const [details, setDetails] = useState({ 
     name: '', 
     mobile: '', 
@@ -23,7 +23,7 @@ const DonationModal = ({ isOpen, onClose, selectedCause }) => {
         setStep(1);
         setProcessing(false);
         setSubCause('');
-        // Note: Hum details reset nahi kar rahe taki user ko naam dubara na likhna pade (Good UX)
+        
     }
   }, [isOpen]);
   if (!isOpen) return null;
@@ -31,7 +31,7 @@ const DonationModal = ({ isOpen, onClose, selectedCause }) => {
   // Sub-causes List
   const getSubCauses = () => {
     switch (selectedCause?.title) {
-      case "Educate a Child": // Note: Title match hona chahiye Home page se
+      case "Educate a Child": 
       case "Education Support":
         return ["Sponsor a Child's Fee", "Buy Books & Uniforms", "Digital Classroom", "Stationery Kit"];
       case "Emergency Medical Aid":
@@ -46,7 +46,7 @@ const DonationModal = ({ isOpen, onClose, selectedCause }) => {
         return ["Direct Aid", "Urgent Needs", "General Support", "Admin & Logistics"];
     }
   };
-   // 👇 1. Razorpay Script Load karne ke liye
+   //  1.to load Razorpay Script
   const loadScript = (src) => {
     return new Promise((resolve) => {
         const script = document.createElement('script');
@@ -57,7 +57,7 @@ const DonationModal = ({ isOpen, onClose, selectedCause }) => {
     });
   };
 
-  // 👇 2. MAIN PAYMENT FUNCTION (Razorpay Integration)
+  //  2. MAIN PAYMENT FUNCTION )
   const handlePayment = async () => {
     // A. Validation
     if (!details.email && !details.isAnonymous) {
@@ -71,11 +71,11 @@ const DonationModal = ({ isOpen, onClose, selectedCause }) => {
     try {
         if (USE_DUMMY_MODE) {
             // ==========================================
-            // 🟢 OPTION 1: DUMMY PAYMENT (ABHI KE LIYE)
+            //  OPTION 1: DUMMY PAYMENT (ABHI KE LIYE)
             // ==========================================
             console.log("Running in Dummy Mode...");
             
-            // 1. Fake Delay (Taaki real feel aaye)
+            // 1. Fake Delay 
             await new Promise(resolve => setTimeout(resolve, 2000));
 
             // 2. Direct Call to Backend
@@ -96,7 +96,7 @@ const DonationModal = ({ isOpen, onClose, selectedCause }) => {
             const data = await res.json();
             if (data.status === "success") {
                 setProcessing(false);
-                setStep(5); // Show Success Screen 🎉
+                setStep(5); // Show Success Screen 
             } else {
                 alert("Donation Failed: " + data.error);
                 setProcessing(false);
@@ -104,7 +104,7 @@ const DonationModal = ({ isOpen, onClose, selectedCause }) => {
 
         } else {
             // ==========================================
-            // 🔴 OPTION 2: RAZORPAY (FUTURE KE LIYE)
+            //  OPTION 2: RAZORPAY (for future)
             // ==========================================
             
             // 1. Load SDK
@@ -260,7 +260,7 @@ const DonationModal = ({ isOpen, onClose, selectedCause }) => {
                 </div>
             )}
 
-            {/* STEP 3: DONOR DETAILS (Inputs fix kiye hain) */}
+            {/* STEP 3: DONOR DETAILS */}
             {step === 3 && (
                 <div className="space-y-4">
                     <div className="space-y-3">

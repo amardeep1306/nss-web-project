@@ -2,12 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-// const nodemailer = require('nodemailer'); // Ab iski zaroorat nahi
 const Razorpay = require('razorpay');   
 const crypto = require('crypto');  
 require('dotenv').config();
-
-// Models Import
 
 const Donation = require('./models/Donation');
 const Volunteer = require('./models/Volunteer');
@@ -77,18 +74,18 @@ app.get('/api/causes-progress', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-// A. SIGNUP API (Naya User Banane ke liye) 🆕
+// A. SIGNUP API 
 app.post('/api/auth/signup', async (req, res) => {
   const { name, email, mobile, city, state, country } = req.body;
 
   try {
-    // 1. Check karein ki user pehle se to nahi hai
+    
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: "User already exists! Please Login directly." });
     }
 
-    // 2. Naya User Create karein (Saari details ke sath)
+    
     const newUser = new User({
       name,
       email,
@@ -96,7 +93,7 @@ app.post('/api/auth/signup', async (req, res) => {
       city,
       state,
       country: country || 'India',
-      // Admin Logic: Agar ye aapki email hai to admin, warna user
+      
       role: email === "amardeepkumar13641364@gmail.com" ? "admin" : "user" 
     });
 
@@ -109,7 +106,7 @@ app.post('/api/auth/signup', async (req, res) => {
   }
 });
 
-// B. SEND OTP (Sirf Login ke liye) 🔒
+// B. SEND OTP 
 app.post('/api/auth/send-otp', async (req, res) => {
   const { email } = req.body;
   
@@ -120,43 +117,34 @@ app.post('/api/auth/send-otp', async (req, res) => {
   try {
     const user = await User.findOne({ email });
     
-    // 👇 STRICT CHECK: Agar user nahi hai, to Error do (Auto-create mat karo)
     if (!user) {
       return res.status(404).json({ error: "User not found! Please Register/Signup first." });
     }
 
-    // OTP Update karo
+    // OTP Updat
     user.otp = otp;
     user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 Min expiry
     await user.save();
 
-   console.log("---- DEBUG START ----");
-console.log("Email from Env:", process.env.SMTP_MAIL);
-console.log("Password Type:", typeof process.env.SMTP_PASSWORD);
-console.log("Password Length:", process.env.SMTP_PASSWORD ? process.env.SMTP_PASSWORD.length : "UNDEFINED");
-console.log("Password First 5 chars:", process.env.SMTP_PASSWORD ? process.env.SMTP_PASSWORD.substring(0, 5) : "N/A");
-console.log("---- DEBUG END ----");
+   console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
 
     const transporter = nodemailer.createTransport({
-      host: "smtp-relay.brevo.com",
-      port: 2525,           
-      secure: false,        // 2525 ke liye bhi False rakhein
+      host: "smtp.gmail.com",
+      port: 587,           
+      secure: false,        
       auth: { 
-        user: process.env.EMAIL_USER, 
-        pass: process.env.EMAIL_PASS 
-      },
-      tls: {
-        rejectUnauthorized: false // Extra safety
-      },
-      family: 4             
+        user: process.env.SMTP_MAIL,
+        pass:  process.env.SMTP_PASSWORD
+      }           
     });
     console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
     const mailOptions = {
-      from: 'NSS IIT Roorkee <amardeepkumar13641364@gmail.com>',
-      to: email,
-      subject: 'Login OTP for NSS Connect',
-      text: `Your OTP is: ${otp}. It is valid for 10 minutes.`
-    };
+  from: `NSS IIT Roorkee <${process.env.SMTP_MAIL}>`,
+  to: email,
+  subject: 'Login OTP for NSS Connect',
+  text: `Your OTP is: ${otp}. It is valid for 10 minutes.`
+};
+
 
     await transporter.sendMail(mailOptions);
 
@@ -168,7 +156,7 @@ console.log("---- DEBUG END ----");
   }
 });
 
-// C. VERIFY OTP (Ye same rahega) ✅
+// C. VERIFY OTP 
 app.post('/api/auth/verify-otp', async (req, res) => {
   const { email, otp } = req.body;
   try {
@@ -194,7 +182,7 @@ app.post('/api/auth/verify-otp', async (req, res) => {
 });
 
 // ---------------------------------------------
-// 3. PAYMENT API (Razorpay Integrated) ✅
+// 3. PAYMENT API (Razorpay Integrated) 
 // ---------------------------------------------
 
 // Route A: Create Order
@@ -227,7 +215,7 @@ app.post('/api/payment-success', async (req, res) => {
     let isAuthentic = false;
     let finalTxnId = "";
 
-    // 👇 LOGIC 1: Asli Razorpay Check (Agar signature aaya hai to verify karo)
+    //  LOGIC 1: real
     if (razorpay_signature) {
         const body = razorpay_order_id + "|" + razorpay_payment_id;
         const expectedSignature = crypto
@@ -238,13 +226,13 @@ app.post('/api/payment-success', async (req, res) => {
         isAuthentic = expectedSignature === razorpay_signature;
         finalTxnId = razorpay_payment_id;
     } 
-    // 👇 LOGIC 2: Dummy Bypass (Agar signature nahi aaya, to direct pass karo)
+    //  LOGIC 2: Dummy Bypass 
     else {
         isAuthentic = true; // Dummy mode ON
         finalTxnId = transactionId || "DUMMY_" + Date.now(); // Fake ID
     }
 
-    // 👇 SAVE TO DB (Common for both)
+    //  SAVE TO DB (Common for both)
     if (isAuthentic) {
       const newDonation = new Donation({
         userName: finalName,
@@ -252,7 +240,7 @@ app.post('/api/payment-success', async (req, res) => {
         amount: amount,
         cause: cause,
         subCause: subCause,
-        transactionId: finalTxnId, // Asli ya Fake ID yahan aayegi
+        transactionId: finalTxnId, 
         status: "Success",
         date: new Date()
       });
@@ -294,44 +282,19 @@ app.get('/api/user/dashboard', async (req, res) => {
   }
 });
 
-
 // ---------------------------------------------
-// 4. FORMS API
-// ---------------------------------------------
-app.post('/api/forms/volunteer', async (req, res) => {
-  try {
-    const newVol = new Volunteer(req.body);
-    await newVol.save();
-    res.json({ status: "success", message: "Application Submitted!" });
-  } catch (err) { res.status(500).json({ error: err.message }); }
-});
-
-app.post('/api/forms/partner', async (req, res) => {
-  try {
-    const newPartner = new Partner(req.body);
-    await newPartner.save();
-    res.json({ status: "success", message: "Partner Request Sent!" });
-  } catch (err) { res.status(500).json({ error: err.message }); }
-});
-
-
-
-// ---------------------------------------------
-// 5. ADMIN DASHBOARD APIs (New Section) 🚀
+// 5. ADMIN DASHBOARD APIs (New Section) 
 // ---------------------------------------------
 
 // A. Get All Users (List for Admin)
 app.get('/api/admin/users', async (req, res) => {
   try {
-    // Sare users lao, naya wala sabse upar
     const users = await User.find().sort({ joinedAt: -1 });
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-
-// B. Get All Donations (List for Admin)
 app.get('/api/admin/donations', async (req, res) => {
   try {
     const donations = await Donation.find().sort({ date: -1 });
@@ -349,7 +312,6 @@ app.get('/api/admin/volunteers', async (req, res) => {
   }
 });
 
-// B. Get all partner requests
 app.get('/api/admin/partners', async (req, res) => {
   try {
     const partners = await Partner.find().sort({ createdAt: -1 });

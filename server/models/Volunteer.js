@@ -8,7 +8,7 @@ const VolunteerSchema = new mongoose.Schema({
   skills: [String], // Array e.g. ['Teaching', 'Medical']
   experience: String,
   idProof: String,
-  status: { type: String, default: "Pending" }, // Admin approve karega
+  status: { type: String, default: "Pending" }, 
   date: { type: Date, default: Date.now }
 });
 

@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-  // 1. Basic Info (Ab Required hai)
+  // 1. Basic Info 
   name: { 
     type: String, 
-    required: true // Signup me naam dena zaroori hai
+    required: true 
   },
   email: { 
     type: String, 
@@ -13,10 +13,10 @@ const UserSchema = new mongoose.Schema({
   },
   mobile: { 
     type: String, 
-    required: true // Mobile number bhi zaroori hai
+    required: true 
   },
 
-  // 2. Location Info (Naya add kiya hai)
+  // 2. Location Info 
   city: { 
     type: String, 
     required: true 

@@ -15,7 +15,7 @@ import AdminDashboard from './pages/AdminDashboard';
 // Components
 import Signup from './pages/Signup';
 import PageWrapper from './components/PageWrapper';
-import ScrollToTop from './components/ScrollToTop'; // <-- Ye Import karein (STEP 1)
+import ScrollToTop from './components/ScrollToTop'; 
 
 // Routes Logic
 const AnimatedRoutes = () => {
@@ -42,7 +42,7 @@ const AnimatedRoutes = () => {
 function App() {
   return (
     <Router>
-      <ScrollToTop /> {/* <-- Ise yahan laga dein (AnimatedRoutes se pehle) (STEP 2) */}
+      <ScrollToTop /> 
       <AnimatedRoutes />
     </Router>
   );

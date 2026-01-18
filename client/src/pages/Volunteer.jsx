@@ -8,7 +8,7 @@ const Volunteer = () => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // Form State (Database fields ke hisab se)
+  // Form State 
   const [formData, setFormData] = useState({
     type: '',
     name: '',
@@ -33,7 +33,7 @@ const Volunteer = () => {
     }));
   };
 
-  // 👇 MAIN CHANGE: Form Submit Logic (Connect to Backend)
+  //  MAIN CHANGE: Form Submit Logic (Connect to Backend)
   const handleSubmit = async () => {
     setLoading(true);
 

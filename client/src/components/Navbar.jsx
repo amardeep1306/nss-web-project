@@ -53,7 +53,7 @@ const Navbar = () => {
           {/* DESKTOP LINKS */}
           <div className="hidden md:flex items-center space-x-6">
             
-            {/* 1. Direct Links (Home Hataya, Logo hi Home hai) */}
+            {/* 1. Direct Links */}
             <NavLink to="/about" className={getLinkClass}>About</NavLink>
             <NavLink to="/donate" className={getLinkClass}>Causes</NavLink>
 
@@ -114,7 +114,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* MOBILE MENU (No Dropdown needed here, list everything) */}
+      {/* MOBILE MENU */}
       {isOpen && (
         <div className="md:hidden bg-white border-t p-4 space-y-2 shadow-xl absolute w-full left-0 animate-fade-in-down h-screen overflow-y-auto pb-32">
           <NavLink to="/" className={getMobileLinkClass} onClick={() => setIsOpen(false)}>Home</NavLink>

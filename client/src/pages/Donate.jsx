@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import DonationModal from '../components/DonationModal'; // 👈 1. Import kiya
+import DonationModal from '../components/DonationModal';
 import { 
   BookOpen, HeartPulse, Utensils, LifeBuoy, 
   Baby, UserPlus, Sprout, Home, HeartHandshake, ArrowRight 
 } from 'lucide-react';
 
 const Donate = () => {
-  // 👈 2. State banaya (Modal kholne aur Cause select karne ke liye)
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCause, setSelectedCause] = useState(null);
 
@@ -97,7 +97,7 @@ const Donate = () => {
     <div className="bg-gray-50 min-h-screen font-sans">
       <Navbar />
 
-      {/* 👈 3. Modal Component ko yahan lagaya */}
+      
       <DonationModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
@@ -131,7 +131,7 @@ const Donate = () => {
                   {cause.desc}
                 </p>
                 
-                {/* 👈 4. Button par onClick lagaya */}
+              
                 <button 
                   onClick={() => openDonation(cause)} 
                   className={`w-full py-3 rounded-xl border-2 font-bold flex items-center justify-center gap-2 transition 

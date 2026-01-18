@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const partnerSchema = new mongoose.Schema({
-  // Humne loose matching ke liye sab common naam daal diye hain
+  
   orgType: String,
-  organizationType: String, // Frontend shayad ye bhej raha hoga
+  organizationType: String, 
   
   organizationName: String,
-  company: String,          // Frontend shayad ye bhej raha hoga
+  company: String,        
 
   city: String,
   location: String,
@@ -26,7 +26,7 @@ const partnerSchema = new mongoose.Schema({
   message: String
 }, { 
   timestamps: true, 
-  strict: false // 👈 MAGIC TRICK: Ab koi validation error nahi aayega!
+  strict: false 
 }); 
 
 module.exports = mongoose.model('Partner', partnerSchema);

@@ -70,7 +70,6 @@ const AdminDashboard = () => {
     }
     if (activeTab === 'partners') {
       return partners.filter(p => {
-        // YAHAN HAI FIX: Dono naam check karega
         const orgName = p.organizationName || p.orgName || ""; 
         return orgName.toLowerCase().includes(term) || (p.email && p.email.toLowerCase().includes(term));
       });
@@ -244,8 +243,8 @@ const AdminDashboard = () => {
   <>
     <th className="p-5 pl-8">Organization Details</th>
     <th className="p-5">Contact Info</th>
-    <th className="p-5">Proposal / Message</th> {/* Ab yahan Message dikhega */}
-    <th className="p-5">Applied Date</th>       {/* Ab yahan Date dikhegi */}
+    <th className="p-5">Proposal / Message</th> 
+    <th className="p-5">Applied Date</th>       
   </>
 )}
                   </tr>
@@ -339,7 +338,7 @@ const AdminDashboard = () => {
     {/* Column 3: Skills (Array Handling) */}
     <td className="p-5">
       <div className="flex flex-wrap gap-1 max-w-xs">
-        {/* Check karega ki Skills Array hai ya nahi */}
+        {/* Check */}
         {Array.isArray(v.skills) && v.skills.length > 0 ? (
           v.skills.map((skill, index) => (
             <span key={index} className="bg-orange-50 text-orange-700 px-2 py-0.5 rounded text-[10px] font-medium border border-orange-100">
@@ -402,7 +401,7 @@ const AdminDashboard = () => {
         <span className="text-xs text-gray-500 flex items-center gap-1 mt-1">
           <Phone size={12} /> {p.mobile || p.phone || "N/A"}
         </span>
-        {/* Agar Email baad me add karte ho to yahan dikhega */}
+        {/* Agar Email added later */}
         {p.email && (
            <span className="text-xs text-blue-500 flex items-center gap-1 mt-0.5">
              <Mail size={12} /> {p.email}
@@ -412,7 +411,7 @@ const AdminDashboard = () => {
     </td>
 
     {/* 3. Goal & Message (Truncated) */}
-    <td className="p-5 max-w-xs"> {/* max-w-xs se column chhota rahega */}
+    <td className="p-5 max-w-xs"> 
       <div className="flex flex-col gap-1">
          {p.collaborationGoal && (
            <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold border border-blue-100 w-fit">
@@ -420,14 +419,14 @@ const AdminDashboard = () => {
            </span>
          )}
          
-         {/* Message ko truncate (kaatna) taaki table lambi na ho */}
+         {/* truncate the message */}
          <p className="text-gray-600 text-xs italic truncate w-48" title={p.message}>
            "{p.message || "No details provided"}"
          </p>
       </div>
     </td>
     
-    {/* 4. Date (Ab 'Just Now' tabhi dikhega jab abhi banaya ho) */}
+    {/* 4. Date */}
     <td className="p-5 text-gray-400 text-xs font-mono">
        {p.createdAt 
          ? new Date(p.createdAt).toLocaleDateString('en-IN') 

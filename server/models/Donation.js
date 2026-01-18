@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const DonationSchema = new mongoose.Schema({
   userName: String,
-  email: { type: String, required: true }, // Isse hum dashboard par history dikhayenge
+  email: { type: String, required: true }, 
   amount: { type: Number, required: true },
   cause: String, // E.g., "Education"
   transactionId: String, // Razorpay Payment ID

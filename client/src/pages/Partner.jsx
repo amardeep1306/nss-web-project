@@ -15,7 +15,7 @@ const Partner = () => {
     contactPerson: '',
     mobile: '',
     email: '', 
-    collaborationGoal: 'CSR Project Funding', //  Default value set kiya (Important)
+    collaborationGoal: 'CSR Project Funding', 
     message: ''
   });
 
@@ -28,7 +28,7 @@ const Partner = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      //  FIX: URL ab Backend wale route se match kar raha hai
+      
       const res = await fetch(`${BASE_URL}/api/forms/partner`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
