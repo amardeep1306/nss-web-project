@@ -130,16 +130,20 @@ app.post('/api/auth/send-otp', async (req, res) => {
     user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 Min expiry
     await user.save();
 
-    console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
-    
+   
+
     const transporter = nodemailer.createTransport({
-      host: "smtp-relay.brevo.com", 
-      port: 587,
-      secure: false, // Brevo 587 par false hi leta hai
+      host: "smtp-relay.brevo.com",
+      port: 2525,           
+      secure: false,        // 2525 ke liye bhi False rakhein
       auth: { 
         user: process.env.EMAIL_USER, 
         pass: process.env.EMAIL_PASS 
-      }
+      },
+      tls: {
+        rejectUnauthorized: false // Extra safety
+      },
+      family: 4             
     });
     console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
     const mailOptions = {
