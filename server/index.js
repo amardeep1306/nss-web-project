@@ -130,7 +130,12 @@ app.post('/api/auth/send-otp', async (req, res) => {
     user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 Min expiry
     await user.save();
 
-   
+   console.log("---- DEBUG START ----");
+console.log("Email from Env:", process.env.SMTP_MAIL);
+console.log("Password Type:", typeof process.env.SMTP_PASSWORD);
+console.log("Password Length:", process.env.SMTP_PASSWORD ? process.env.SMTP_PASSWORD.length : "UNDEFINED");
+console.log("Password First 5 chars:", process.env.SMTP_PASSWORD ? process.env.SMTP_PASSWORD.substring(0, 5) : "N/A");
+console.log("---- DEBUG END ----");
 
     const transporter = nodemailer.createTransport({
       host: "smtp-relay.brevo.com",
