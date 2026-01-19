@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
+const axios = require('axios');
 const Razorpay = require('razorpay');   
 const crypto = require('crypto');  
 require('dotenv').config();
@@ -106,12 +106,13 @@ app.post('/api/auth/signup', async (req, res) => {
   }
 });
 
-// B. SEND OTP 
+// B. SEND OTP (Updated with Brevo API + Console Log Backup)
 app.post('/api/auth/send-otp', async (req, res) => {
   const { email } = req.body;
   
   if (!email) return res.status(400).json({ error: "Email is compulsory" });
 
+  // 4 Digit OTP
   const otp = Math.floor(1000 + Math.random() * 9000).toString(); 
 
   try {
@@ -121,32 +122,56 @@ app.post('/api/auth/send-otp', async (req, res) => {
       return res.status(404).json({ error: "User not found! Please Register/Signup first." });
     }
 
-    // OTP Updat
+    // 1. Database Update (OTP Save karna)
     user.otp = otp;
     user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 Min expiry
     await user.save();
 
-   console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+    // 2. [IMPORTANT] Console Backup (Taaki API fail hone par bhi login kar sako)
+    console.log("\n========================================");
+    console.log("🔥 LOGIN OTP:", otp);
+    console.log("========================================\n");
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',      
-      auth: { 
-        user: process.env.SMTP_MAIL,
-        pass:  process.env.SMTP_PASSWORD
-      }           
-    });
-    console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
-    const mailOptions = {
-  from: `NSS IIT Roorkee <${process.env.SMTP_MAIL}>`,
-  to: email,
-  subject: 'Login OTP for NSS Connect',
-  text: `Your OTP is: ${otp}. It is valid for 10 minutes.`
-};
+    // 3. Brevo API Call (Real Email Sending)
+    const sendEmail = async () => {
+      try {
+        await axios.post(
+          'https://api.brevo.com/v3/smtp/email',
+          {
+            sender: {
+              name: "NSS IIT Roorkee",
+              email: process.env.SMTP_MAIL // Note: Ye email Brevo me verify hona chahiye
+            },
+            to: [{ email: email }],
+            subject: "Login OTP for NSS Connect",
+            htmlContent: `
+              <div style="font-family: Arial, sans-serif; padding: 20px;">
+                <h2>NSS IIT Roorkee Login</h2>
+                <p>Your One Time Password (OTP) is:</p>
+                <h1 style="color: #2c3e50;">${otp}</h1>
+                <p>This OTP is valid for 10 minutes.</p>
+              </div>`
+          },
+          {
+            headers: {
+              'api-key': process.env.SMTP_PASSWORD, // .env file se key lega
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+        console.log("✅ Email sent via Brevo API");
+      } catch (apiError) {
+        console.error("⚠️ Email API Failed (But OTP is saved in DB):", apiError.message);
+        // Hum error throw nahi karenge taaki frontend par 'Success' hi dikhe
+        // aur tum console wala OTP use kar sako.
+      }
+    };
 
+    // Email bhejne ka function call karo
+    await sendEmail();
 
-    await transporter.sendMail(mailOptions);
-
-    res.json({ status: "success", message: "OTP Sent to Email (Check Console)" });
+    // Frontend ko Success bhejo
+    res.json({ status: "success", message: "OTP Sent! (Check Email or Server Console)" });
   
   } catch (err) {
     console.error(err);
@@ -154,7 +179,8 @@ app.post('/api/auth/send-otp', async (req, res) => {
   }
 });
 
-// C. VERIFY OTP 
+
+// C. VERIFY OTP (Isme koi change nahi hai - Same as old)
 app.post('/api/auth/verify-otp', async (req, res) => {
   const { email, otp } = req.body;
   try {
@@ -178,7 +204,6 @@ app.post('/api/auth/verify-otp', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 // ---------------------------------------------
 // 3. PAYMENT API (Razorpay Integrated) 
 // ---------------------------------------------
