@@ -318,6 +318,65 @@ app.get('/api/admin/partners', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// ---------------------------------------------
+// PARTNER PROPOSAL API
+// ---------------------------------------------
+app.post('/api/partners', async (req, res) => {
+  try {
+    // Frontend se ye fields aa rahi hain
+    const { organization, city, name, mobile, email, goal, message } = req.body;
+
+    const newPartner = new Partner({
+      organization,
+      city,
+      name,
+      mobile,
+      email,
+      collaborationGoal: goal, // Frontend 'goal' bhejta hai, DB me shayad 'collaborationGoal' ho
+      message
+    });
+
+    await newPartner.save();
+    res.json({ status: "success", message: "Proposal Submitted Successfully!" });
+
+  } catch (err) {
+    console.error("Partner Save Error:", err);
+    res.status(500).json({ error: "Failed to submit proposal" });
+  }
+});
+// ---------------------------------------------
+// VOLUNTEER REGISTRATION API (Updated with Aadhaar logic)
+// ---------------------------------------------
+app.post('/api/volunteers', async (req, res) => {
+  try {
+    // 1. Frontend se 'aadhaar' aur 'hasVolunteered' bhi receive karein
+    const { name, email, mobile, course, year, whyJoin, aadhaar, hasVolunteered } = req.body;
+
+    const existingVolunteer = await Volunteer.findOne({ email });
+    if (existingVolunteer) {
+      return res.status(400).json({ error: "You have already registered as a volunteer!" });
+    }
+
+    const newVolunteer = new Volunteer({
+      name,
+      email,
+      mobile,
+      course,
+      year,
+      whyJoin,
+      aadhaar,          
+      hasVolunteered, 
+      date: new Date()
+    });
+
+    await newVolunteer.save();
+    res.json({ status: "success", message: "Volunteer Registration Successful!" });
+
+  } catch (err) {
+    console.error("Volunteer Save Error:", err);
+    res.status(500).json({ error: "Failed to register volunteer" });
+  }
+});
 // Server Start
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server Running on Port ${PORT}`));

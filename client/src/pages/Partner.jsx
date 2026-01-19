@@ -25,21 +25,36 @@ const Partner = () => {
   };
 
   // 3. HANDLE SUBMIT
+  // 3. HANDLE SUBMIT (Updated for Backend Match)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       
-      const res = await fetch(`${BASE_URL}/api/forms/partner`, {
+      // Data ko Backend ke names ke hisab se convert kar rahe hain
+      const payload = {
+        organization: formData.organizationName, // Backend 'organization' mangta hai
+        city: formData.city,
+        name: formData.contactPerson,            // Backend 'name' mangta hai
+        mobile: formData.mobile,
+        email: formData.email,
+        goal: formData.collaborationGoal,        // Backend 'goal' mangta hai
+        message: formData.message,
+        orgType: formData.orgType                // Ye extra bhej rahe hain (optional)
+      };
+
+      
+      const res = await fetch(`${BASE_URL}/api/partners`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload) 
       });
 
       const data = await res.json();
-      if (data.status === 'success') {
+      
+      if (res.ok) { // Check for 200 OK status
         setSubmitted(true);
       } else {
-        alert("Error: " + (data.error || "Unknown Error"));
+        alert("Error: " + (data.error || "Submission Failed"));
       }
     } catch (err) {
       console.error(err);
